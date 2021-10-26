@@ -1,0 +1,120 @@
+---
+title: "Lab 5"
+author: "Julia Wilson"
+date: "10/26/2021"
+output: 
+  html_document: 
+    toc: yes
+    theme: cerulean
+    number_sections: yes
+    code_folding: hide
+---
+
+
+```{r setup, include = TRUE, warning = FALSE, message = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+Notes: 
+- To ignore certain files, insert * = everything, and the .NAME
+- code_folding: hide; where there is code that exists, the user can click if they want to see the code
+- Don't have to insert #, bc number_sections does it for you
+- A list: structure of data with a vector. It's a flexible way to store information. 
+
+
+
+# Confidence Intervals 
+
+In this section we'll learn to use the 't.test()' function as a way to return the confidence interval using the t-distribution. 
+
+## Example 1 
+
+Create a mock sample of observations values, and find the confidence interval. Then we'll learn how to report that. 
+
+```{r}
+pika_mass <- c(82, 94, 110, 70, 86, 99, 202)
+
+pika_mean <- mean(pika_mass)
+
+pika_sd <- sd(pika_mass)
+
+pika_ci <- t.test(pika_mass)
+
+pika_ci
+```
+
+Notes
+Ways to communicate these model outputs.
+You are likely to make a mistake if you write the code like this, it isn't reproducible. You want your text to update as you change data and update code. 
+Hover over a function and press command return to see the outcome 
+To simplify sig figs use round(data, # of sig figs)
+
+### Risky & Tedious Way: 
+
+Mean pika mass at Paiute Pass is 91.9 g $\pm$ 13.5 g 
+(mean $\pm$ 1 standard deviation, n = 7) with a 95%
+confidence interval of [79.4, 104.4] g. 
+
+### High Initial Investment, but Safer & Better 
+
+In-line code referencing to stored objects!
+
+Use a single backtick on either side of a lowercase r to create
+an inline bit of code. 
+
+Mean pike mass at Paiute Pass is `r round(pika_mean, 1)` 
+g $\pm$ `r round(pika_sd, 1)` g (mean $\pm$ 1 standard deviation, 
+n = `r length(pika_mass)`) with a 95% confidence interval of 
+[`r pika_ci$conf.int[1]`, `r pika_ci$conf.int[2]`] g.
+
+
+Notes: 
+- Pull things from a list in the same way you owuld refer to 
+a single column in a data frame. 
+- Ie my list which includes 5 vectors. If I want to pull 1 vector, 
+use the $. my_list$name or my_list$age 
+- If you want to see a specific element type this in console: 
+pika_ci$p.value 
+- CI is a vector containing two values. Now we will 'index' which
+tells R what position of the vector we are interested in 
+- Ie type pika_mass pulls all values in vector; then type pika_mass[#]
+
+# Two-sample t-test
+
+Use a two-sample t-test to test the null hypothesis that samples were drawn from populations w/ the same mean (diff in means=0).
+
+- HO: means diff = 0 
+- HA: means diff is NOT =0
+
+This is a two-sided t-test bc no directionality is implied
+
+## Example 1
+
+```{r}
+oak_trees <- c(23,34,12,25,43,23,38)
+pine_trees <- c(47,39,44,51,60,54,65)
+```
+
+Is there a significant difference in mean heights for oak and pine trees? 
+
+```{r}
+trees_t <- t.test(oak_trees, pine_trees)
+```
+
+The p_value of `r trees_t$p.value` means that .... there is `r (trees_t$p.value) *100` % chance of finding
+sample means at least as different as those I found by random chance if they 
+were drawn from populations with the same mean height. 
+
+
+
+
+
+
+
+
+
+
+
+
+
